@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Purple messenger</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/ikonca.ico">
+</head>
+<body>
+    <div class="modal" id="username-modal" style="display: none;">
+        <form id="username-form">
+            <h1>Enter your username</h1>
+            <input type="text" id="username-input" placeholder="Username" required />
+            <input type="submit" value="Continue" />
+        </form>
+    </div>
+    
+    <div class="modal" id="room-modal">
+        <form id="group-form" action="">
+            <h1>Join / create room</h1>
+            <input id="roomInput" type="text" value="" placeholder="group name" required>
+            <input type="submit" value="Join">
+        </form>
+    </div>
+
+    <div style="display: none;" id="settings-modal">
+        <div>
+            <h1>Settings</h1>
+            <form id="settings-form">
+                <table>
+                    <tr>
+                        <td><label>Background Color</label></td>
+                        <td><input type="color" id="c1"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Text Color</label></td>
+                        <td><input type="color" id="c2"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Your Message Color</label></td>
+                        <td><input type="color" id="c3"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Other's Message Color</label></td>
+                        <td><input type="color" id="c4"></td>
+                    </tr>
+               
+                    <tr>
+                        <td>
+                            <label for="font-picker">Choose Primary Font:</label>
+                        </td>
+                        <td>
+                            <select id="font-picker">
+                                <option value="'Poppins'" style="font-family: 'Poppins';">Poppins</option>
+                                <option value="Arial" style="font-family: Arial;">Arial</option>
+                                <option value="Verdana" style="font-family: Verdana;">Verdana</option>
+                                <option value="'Times New Roman'" style="font-family: 'Times New Roman';">Times New Roman</option>
+                                <option value="'Courier New'" style="font-family: 'Courier New';">Courier New</option>
+                                <option value="Georgia" style="font-family: Georgia;">Georgia</option>
+                                <option value="Tahoma" style="font-family: Tahoma;">Tahoma</option>
+                                <option value="'Trebuchet MS'" style="font-family: 'Trebuchet MS';">Trebuchet MS</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="sec-font-picker">Choose Secondary Font:</label>
+                        </td>
+                        <td>
+                            <select id="sec-font-picker">
+                                <option value="Verdana" style="font-family: Verdana;">Verdana</option>
+                                <option value="'Poppins'" style="font-family: 'Poppins';">Poppins</option>
+                                <option value="Arial" style="font-family: Arial;">Arial</option>
+                                <option value="'Times New Roman'" style="font-family: 'Times New Roman';">Times New Roman</option>
+                                <option value="'Courier New'" style="font-family: 'Courier New';">Courier New</option>
+                                <option value="Georgia" style="font-family: Georgia;">Georgia</option>
+                                <option value="Tahoma" style="font-family: Tahoma;">Tahoma</option>
+                                <option value="'Trebuchet MS'" style="font-family: 'Trebuchet MS';">Trebuchet MS</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table><br>
+                <input type="submit" value="Submit">
+            </form>
+        
+        </div>
+        <svg id="setting-exit" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+            <path d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 8.7070312 7.2929688 L 7.2929688 8.7070312 L 10.585938 12 L 7.2929688 15.292969 L 8.7070312 16.707031 L 12 13.414062 L 15.292969 16.707031 L 16.707031 15.292969 L 13.414062 12 L 16.707031 8.7070312 L 15.292969 7.2929688 L 12 10.585938 L 8.7070312 7.2929688 z"></path>
+        </svg>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="contact-div">
+                <button id="contacts-btn" class="contacts-btn">
+                    <img src="assets/contact-icon.png" alt="Contacts" height="25">
+                </button>
+                <h2 id="curr-room">Current room</h2>
+            </div>
+            <div class="header-right">
+                <div id="user-div"> 
+                    <svg id="user-icon" class="account-btn" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0h24ZM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036c-.01-.003-.019 0-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.016-.018Zm.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10a9.959 9.959 0 0 1-2.258 6.33l.02.022l-.132.112A9.978 9.978 0 0 1 12 22c-2.95 0-5.6-1.277-7.43-3.307l-.2-.23l-.132-.11l.02-.024A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2Zm0 15c-1.86 0-3.541.592-4.793 1.405A7.965 7.965 0 0 0 12 20a7.965 7.965 0 0 0 4.793-1.595A8.897 8.897 0 0 0 12 17Zm0-13a8 8 0 0 0-6.258 12.984C7.363 15.821 9.575 15 12 15s4.637.821 6.258 1.984A8 8 0 0 0 12 4Zm0 2a4 4 0 1 1 0 8a4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4a2 2 0 0 0 0-4Z"/></g></svg>
+                    
+                    <h2 id="curr-username">Your username</h2>
+                </div>
+                
+                <svg id="settings" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="Gear--Streamline-Font-Awesome" height="16" width="16"><path d="M15.496875 5.20625c0.1 0.271875 0.015625 0.575 -0.2 0.76875l-1.353125 1.23125c0.034375 0.259375 0.053125 0.525 0.053125 0.79375s-0.01875 0.534375 -0.053125 0.79375l1.353125 1.23125c0.215625 0.19375 0.3 0.496875 0.2 0.76875 -0.1375 0.371875 -0.303125 0.728125 -0.49375 1.071875l-0.146875 0.253125c-0.20625 0.34375 -0.4375 0.66875 -0.690625 0.975 -0.184375 0.225 -0.490625 0.3 -0.765625 0.2125l-1.740625 -0.553125c-0.41875 0.321875 -0.88125 0.590625 -1.375 0.79375l-0.390625 1.784375c-0.0625 0.284375 -0.28125 0.509375 -0.56875 0.55625 -0.43125 0.071875 -0.875 0.109375 -1.328125 0.109375s-0.896875 -0.0375 -1.328125 -0.109375c-0.2875 -0.046875 -0.50625 -0.271875 -0.56875 -0.55625l-0.390625 -1.784375c-0.49375 -0.203125 -0.95625 -0.471875 -1.375 -0.79375l-1.7375 0.55625c-0.275 0.0875 -0.58125 0.009375 -0.765625 -0.2125 -0.253125 -0.30625 -0.484375 -0.63125 -0.690625 -0.975l-0.146875 -0.253125c-0.190625 -0.34375 -0.35625 -0.7 -0.49375 -1.071875 -0.1 -0.271875 -0.015625 -0.575 0.2 -0.76875l1.353125 -1.23125c-0.034375 -0.2625 -0.053125 -0.528125 -0.053125 -0.796875s0.01875 -0.534375 0.053125 -0.79375l-1.353125 -1.23125c-0.215625 -0.19375 -0.3 -0.496875 -0.2 -0.76875 0.1375 -0.371875 0.303125 -0.728125 0.49375 -1.071875l0.146875 -0.253125c0.20625 -0.34375 0.4375 -0.66875 0.690625 -0.975 0.184375 -0.225 0.490625 -0.3 0.765625 -0.2125l1.740625 0.553125c0.41875 -0.321875 0.88125 -0.590625 1.375 -0.79375l0.390625 -1.784375c0.0625 -0.284375 0.28125 -0.509375 0.56875 -0.55625C7.103125 0.0375 7.546875 0 8 0s0.896875 0.0375 1.328125 0.109375c0.2875 0.046875 0.50625 0.271875 0.56875 0.55625l0.390625 1.784375c0.49375 0.203125 0.95625 0.471875 1.375 0.79375l1.740625 -0.553125c0.275 -0.0875 0.58125 -0.009375 0.765625 0.2125 0.253125 0.30625 0.484375 0.63125 0.690625 0.975l0.146875 0.253125c0.190625 0.34375 0.35625 0.7 0.49375 1.071875zM8 10.5a2.5 2.5 0 1 0 0 -5 2.5 2.5 0 1 0 0 5z" fill="#000000" stroke-width="0.0313"></path></svg>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <!--<div class="chat-messages" id="message-div">-->
+            <ul class="chat-messages" id="messages"></ul>
+        <!--</div>-->
+        <div class="chat-input">
+            <form id="form" action="">
+                <input type="text" id="input" value="" autocomplete="off" placeholder="Type a message..." />
+                <button>Send</button>
+            </form>
+        </div>
+    </div>
+   
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+const socket = io();
+
+let username = localStorage.getItem("username");
+const usernameModal = document.getElementById("username-modal");
+const usernameForm = document.getElementById("username-form");
+const usernameInput = document.getElementById("username-input");
+
+const username_modal = document.getElementById('username-modal');
+
+username_modal.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const entered = usernameInput.value.trim();
+    if (entered) {
+        const isUnique = await verifyUsername(entered);
+        if (isUnique) {
+            username = entered;
+            localStorage.setItem("username", username);
+            usernameModal.style.display = "none";
+
+            const usernameDisplay = document.getElementById('curr-username');
+            if (usernameDisplay) usernameDisplay.textContent = username;
+        } else {
+            alert("Username already taken. Choose another.");
+        }
+    }
+});
+
+const clientId = localStorage.getItem("clientId") || crypto.randomUUID();
+localStorage.setItem("clientId", clientId);
+
+socket.emit("identify", clientId);
+
+function verifyUsername(name) {
+    return new Promise((resolve) => {
+        socket.emit("checkUsername", name);
+        socket.once("usernameStatus", (status) => {
+            resolve(status);
+        });
+    });
+}
+
+if (!username) {
+    console.log("usr: " + username);
+    usernameModal.style.display = "flex";
+
+    if (!usernameForm.hasListener) {
+        usernameForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const entered = usernameInput.value.trim();
+            if (entered) {
+                const isUnique = await verifyUsername(entered);
+                if (isUnique) {
+                    username = entered;
+                    localStorage.setItem("username", username);
+                    usernameModal.style.display = "none";
+
+                    const usernameDisplay = document.getElementById('curr-username');
+                    if (usernameDisplay) usernameDisplay.textContent = username;
+                } else {
+                    alert("Username already taken. Choose another.");
+                }
+            }
+        });
+        usernameForm.hasListener = true;
+    }
+
+} else {
+    console.log("usr: " + username);
+    socket.emit("checkUsername", username);
+    socket.once("usernameStatus", (status) => {
+        if (!status) {
+            localStorage.removeItem("username");
+            location.reload();
+        } else {
+            usernameModal.style.display = "none";
+
+            const usernameDisplay = document.getElementById('curr-username');
+            if (usernameDisplay) usernameDisplay.textContent = username;
+        }
+    });
+}
+
+const usernameDisplay = document.getElementById('curr-username');
+usernameDisplay.textContent = username;
+
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
+
+let currentRoom = "";
+
+const gform = document.getElementById('group-form');
+const ginput = document.getElementById('roomInput');
+const room_modal = document.getElementById('room-modal');
+
+let lastRoom = localStorage.getItem("last_room");
+const currRoomEl = document.getElementById('curr-room');
+
+if(lastRoom) {
+    currentRoom = lastRoom;
+    socket.emit("joinRoom",  {room: currentRoom, username});
+    room_modal.style.display = "none";
+
+    currRoomEl.textContent = "Room: "+ currentRoom;
+}
+
+gform.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (ginput.value) {
+        console.log("Group: " + ginput.value);
+        currentRoom = ginput.value;
+        socket.emit("joinRoom", currentRoom);
+        localStorage.setItem("last_room", ginput.value);
+        currRoomEl.textContent = "Room: "+currentRoom;
+        
+        ginput.value = '';
+    }
+
+    room_modal.style.display = "none";
+});
+
+
+socket.on("messageDeleted", (msgId) => {
+    const msgElement = document.querySelector(`[data-msg-id='${msgId}']`);
+    if (msgElement) {
+        msgElement.innerHTML = "<i>Message deleted</i>"; 
+        msgElement.classList += " del-msg";
+        //console.log("Message deleted.");
+    }
+});
+
+socket.on("roomjoin", (msg) => {
+    //console.log("joined room: " + msg);
+    
+    const li = document.createElement("li");
+    li.textContent = msg;
+    li.classList += " roomjoin";
+    li.classList += " sys-msg";
+    document.getElementById("messages").appendChild(li);
+    
+    window.scrollTo(0, document.body.scrollHeight);
+});
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log("input:" + input.value);
+    if (input.value) {
+        socket.emit("chatMessage", { room: currentRoom, message: input.value });
+        
+        console.log("Sent: " + input.value);
+        input.value = '';
+    }
+});
+
+socket.on("message", (messageData) => {
+    console.log("Received message: " + messageData.content + " with UUID: " + messageData.id);
+
+    const li = document.createElement("li");
+    li.setAttribute("data-msg-id", messageData.id);
+
+    li.innerHTML = `
+    <div class="msg-meta">
+        <span class="msg-time">${new Date().toTimeString().slice(0, 5)}</span>
+        <i class="msg-sender">${messageData.username}</i>
+    </div>
+    <span class="msg-data">${messageData.content}</span>
+    `;
+
+    if (messageData.username === username) {
+        li.classList.add("my-msg");
+        li.addEventListener("dblclick", () => {
+            const msgId = li.getAttribute("data-msg-id");
+            if (!li.classList.contains("del-msg") && confirm("Delete this message?")) {
+                socket.emit("msg-del-req", { room: currentRoom, msg_id: msgId });
+            }
+        });
+    }
+    else {
+        li.classList.add("othr-msg");
+    }
+
+    document.getElementById("messages").appendChild(li);
+    window.scrollTo(0, document.body.scrollHeight);
+});
+
+
+document.getElementById('settings-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const color1 = document.getElementById('c1').value;
+    const color2 = document.getElementById('c2').value;
+    const color3 = document.getElementById('c3').value;
+    const color4 = document.getElementById('c4').value;
+
+    const root = document.documentElement;
+
+    root.style.setProperty('--color1', color1);
+    root.style.setProperty('--color2', color2);
+    root.style.setProperty('--color3', color3);
+    root.style.setProperty('--color4', color4);
+
+    const firstFont = document.getElementById('font-picker').value;
+    const secondFont = document.getElementById('sec-font-picker').value;
+
+    root.style.setProperty('--main-font', firstFont);
+    root.style.setProperty('--secondary-font', secondFont);
+
+    let m = document.getElementById('settings-modal');
+    if(m.style.display == "none") {
+        m.style.display = "";
+    }
+    else {
+        m.style.display = "none";
+    }
+});
+
+
+//SETTINGS GUMB
+
+const settingsButton = document.getElementById('settings');
+settingsButton.addEventListener('click', () => {
+    let m = document.getElementById('settings-modal');
+    if(m.style.display == "none") {
+        m.style.display = "";
+    }
+    else {
+        m.style.display = "none";
+    }
+    
+    const root = document.documentElement;
+
+    const c1 = getComputedStyle(root).getPropertyValue('--color1').trim();
+    const c2 = getComputedStyle(root).getPropertyValue('--color2').trim();
+    const c3 = getComputedStyle(root).getPropertyValue('--color3').trim();
+    const c4 = getComputedStyle(root).getPropertyValue('--color4').trim();
+
+    const f1 = getComputedStyle(root).getPropertyValue('--main-font').trim();
+    const f2 = getComputedStyle(root).getPropertyValue('--secondary-font').trim();
+
+    _c1 = document.getElementById('c1').value;
+    _c2 = document.getElementById('c2').value;
+    _c3 = document.getElementById('c3').value;
+    _c4 = document.getElementById('c4').value;
+
+    if(_c1 && _c2 && _c3 && _c4) {
+        document.getElementById('c1').value = c1;
+        document.getElementById('c2').value = c2;
+        document.getElementById('c3').value = c3;
+        document.getElementById('c4').value = c4;
+    }
+});
+
+const settingsExitButton = document.getElementById('setting-exit');
+settingsExitButton.addEventListener('click', () => {
+    let m = document.getElementById('settings-modal');
+    if(m.style.display == "none") {
+        m.style.display = "";
+    }
+    else {
+        m.style.display = "none";
+    }
+});
+
+//un gumb
+
+const contactsBtn = document.getElementById('contacts-btn');
+contactsBtn.addEventListener('click', () => {
+    if(room_modal.style.display == "none") {
+        room_modal.style.display = "";
+    }
+    else {
+        room_modal.style.display = "none";
+    }
+});
+
+const accountBtn = document.getElementById('user-icon');
+accountBtn.addEventListener('click', () => {
+    if(username_modal.style.display == "none") {
+        username_modal.style.display = "";
+    }
+    else {
+        username_modal.style.display = "none";
+    }
+});
+
+</script>
+</body>
+</html>
